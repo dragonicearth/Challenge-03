@@ -1,4 +1,4 @@
-const fs = require('fs');
+import fs from 'fs';
 
 class ProductManager {
 
@@ -9,9 +9,9 @@ class ProductManager {
         this.loadProducts();
     }
 
-    loadProducts() {
+    async loadProducts() {
         try {
-            const data = fs.readFileSync(this.path, "utf8");
+            const data = await fs.promises.readFileSync(this.path, "utf8");
             this.products = JSON.parse(data);
             this.nextID = Math.max(...this.products.map(product => product.id), 0) + 1;
         } catch (error) {
@@ -82,30 +82,41 @@ class ProductManager {
 
 }
 
-const filePath = "./products.json";
+export default ProductManager;
 
-const pimpon = new ProductManager(filePath)
-pimpon.addProduct("titulo", "description", 89, "thumbnail", "#ABC", 50);
-pimpon.addProduct("titulo2", "description2", 101, "thumbnail", "#JBK", 877);
-pimpon.addProduct("titulo3", 500, "thumbnail", "#ERR", 800);
-console.log(pimpon.getProducts());
-console.log(pimpon.getProductsByID(4));
+function operaciones() {
+    const filePath = "./products.json";
 
-const updatedProduct = {
-    title: "Producto Modificado",
-    description: "Nueva descripción",
-    price: 100,
-    thumbnail: "newThumbnail",
-    code: "#XYZ",
-    stock: 30
-};
+    const pimpon = new ProductManager(filePath)
+    pimpon.addProduct("titulo1", "description1", 100, "thumbnail1", "#ERR", 100);
+    pimpon.addProduct("titulo2", "description2", 200, "thumbnail2", "#ABC", 200);
+    pimpon.addProduct("titulo3", "description3", 300, "thumbnail3", "#BNM", 300);
+    pimpon.addProduct("titulo4", "description4", 400, "thumbnail4", "#KLÑ", 400);
+    pimpon.addProduct("titulo5", "description5", 500, "thumbnail5", "#XYZ", 500);
+    pimpon.addProduct("titulo6", "description6", 600, "thumbnail6", "#UMN", 600);
+    pimpon.addProduct("titulo7", "description7", 700, "thumbnail7", "#QRS", 700);
+    pimpon.addProduct("titulo8", "description8", 800, "thumbnail8", "#PQR", 800);
+    pimpon.addProduct("titulo9", "description9", 900, "thumbnail9", "#FGH", 900);
+    pimpon.addProduct("titulo10", "description10", 1000, "thumbnail10", "#ABC", 1000);
 
-const updateResult = pimpon.updateProduct(1, updatedProduct);
-console.log("¿Producto actualizado correctamente?", updateResult);
-console.log("Productos después de la modificación:");
-console.log(pimpon.getProducts());
+    const updatedProduct = {
+        title: "Producto Modificado",
+        description: "Nueva descripción",
+        price: 100,
+        thumbnail: "newThumbnail",
+        code: "#XYZ",
+        stock: 30
+    };
 
-const deleteResult = pimpon.deleteProduct(2);
-console.log("¿Producto eliminado correctamente?", deleteResult);
-console.log("Productos después de la eliminación:");
-console.log(pimpon.getProducts());
+    const updateResult = pimpon.updateProduct(1, updatedProduct);
+    console.log("¿Producto actualizado correctamente?", updateResult);
+    console.log("Productos después de la modificación:");
+    console.log(pimpon.getProducts());
+
+    const deleteResult = pimpon.deleteProduct(2);
+    console.log("¿Producto eliminado correctamente?", deleteResult);
+    console.log("Productos después de la eliminación:");
+    console.log(pimpon.getProducts());
+}
+
+operaciones();
